@@ -178,17 +178,53 @@ Send us an [email](mailto:accio241112@gmail.com) if you are interested in opport
 
 # Improvements
 
-## Enhanced RL2 Features & Implementation Summary
-
 ---
+
+## Extended RL2: Enhanced Features & Implementation Summary
+
+> **Note:** This project is an **extended version** of the original [RL2 repository](https://github.com/ChenmienTan/RL2). All credit for the foundational code, design, and core ideas goes to the RL2 authors. This extension builds on their work, adding advanced features, improved memory optimization, multi-objective optimization, automated hyperparameter tuning, and modern MLOps integrations. The original RL2 repo is the main inspiration and reference for this project.
 
 ### Overview
 
 This section documents the comprehensive enhancements made to RL2, including adaptive KL penalty mechanisms, multi-objective optimization, advanced advantage estimation, automated hyperparameter tuning, memory optimization, and experiment tracking. All features are implemented, tested, and documented.
 
+### Key Improvements
+
+- **Adaptive KL Penalty Mechanisms**: Exponential, linear, PID, and schedule-based controllers for stable policy optimization.
+- **Constraint Optimization**: KL/entropy constraints, Lagrangian multipliers, and penalty-based constraint handling.
+- **Multi-Objective Optimization**: Weighted sum, Tchebycheff, Pareto dominance, and hypervolume methods with Pareto frontier tracking.
+- **Alternative Advantage Estimation**: GAE, V-trace, Retrace(λ), TD(λ), clipped IS, multi-step returns, and a unified interface.
+- **Hyperparameter Optimization**: Random, grid, and Bayesian optimization (Optuna, scikit-optimize, hyperopt, bayesian-optimization).
+- **Advanced Memory Optimization**: Profiling, adaptive batch sizing, CPU offloading, gradient checkpointing, and memory statistics.
+- **Experiment Tracking & MLOps**: MLflow and Weights & Biases (W&B) integration, model versioning, and system metrics logging.
+
+All enhancements are fully backward compatible and can be enabled or disabled via configuration.
+
+### Usage Example
+
+```python
+from RL2.algs import AdaptiveKLController, MultiObjectiveOptimizer
+from RL2.memory_optimizer import MemoryOptimizer
+from RL2.experiment_tracking import ExperimentTracker
+
+# Adaptive KL penalty
+kl_controller = AdaptiveKLController(controller_type='exponential', target_kl=0.01, initial_coef=0.2)
+
+# Multi-objective optimization
+mo_optimizer = MultiObjectiveOptimizer(objectives=['reward', 'kl_penalty', 'entropy'], method='weighted_sum')
+
+# Memory optimization
+memory_optimizer = MemoryOptimizer(memory_threshold=0.8, gc_threshold=0.9)
+
+# Experiment tracking
+tracker = ExperimentTracker(experiment_name="RL2_Enhanced_Training", enable_mlflow=True, enable_wandb=True)
+```
+
+For more details, see the [Improvements](#improvements) section below and the configuration examples in `RL2/trainer/config/ppo.yaml`.
+
 ---
 
-## ✅ Completed Features
+## Improvements
 
 ### 1. Adaptive KL Penalty Mechanisms
 - **Exponential Controller**: Adaptive exponential decay/growth based on KL divergence
@@ -404,4 +440,4 @@ experiment_tracking:
 1. ✅ Adaptive KL penalty mechanisms (4 controller types)
 2. ✅ Constraint optimization (KL/entropy constraints with Lagrangian)
 3. ✅ Multi-objective optimization (4 methods with Pareto frontiers)
-4. ✅ ML tools integration (MLflow, W
+4. ✅ ML tools integration MLflow
