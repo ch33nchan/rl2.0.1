@@ -3,6 +3,24 @@
 Enhanced RL2 Example with All New Features
 ==========================================
 
+# Example Usage (Bash)
+# --------------------
+# To run individual component examples:
+#
+#   python examples/example_adaptive_kl.py
+#   python examples/example_multi_objective.py
+#   python examples/example_memory_optimizer.py
+#   python examples/example_experiment_tracker.py
+#
+# To run all examples in sequence:
+#
+#   bash examples/run_all_examples.sh
+#
+# To run the full enhanced RL2 demo:
+#
+#   python examples/enhanced_rl2_example.py --config examples/enhanced_ppo_config.yaml
+#
+
 This script demonstrates the new features added to RL2:
 1. Adaptive KL penalty mechanisms
 2. Multi-objective optimization with Pareto frontiers
