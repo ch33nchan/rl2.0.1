@@ -1,0 +1,9 @@
+{
+  "best_params": {
+    "lr": 1.329291894316217e-05,
+    "batch_size": 32
+  },
+  "best_value": 0.5543743160481298,
+  "objective_name": "reward",
+  "n_trials": 5
+}

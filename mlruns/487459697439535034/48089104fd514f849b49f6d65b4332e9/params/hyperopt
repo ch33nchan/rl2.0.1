@@ -1,0 +1,1 @@
+{'enabled': False, 'optimizer_type': 'random', 'n_trials': 100, 'save_dir': 'hyperopt_results', 'bayesian': {'exploration_weight': 0.1}, 'grid': {'grid_size': 10}}

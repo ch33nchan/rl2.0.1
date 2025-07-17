@@ -1,0 +1,29 @@
+- Add adaptive KL penalty mechanisms and constraint optimization
+- Support multi-objective optimization with Pareto frontiers
+- Integrate with popular ML tools (MLflow,)
+- No automated hyperparameter tuning: Missing support for automated hyperparameter optimization
+- Limited memory optimization: Basic memory management without advanced optimization strategies
+- No adaptive batch sizing: Fixed batch sizing without dynamic adjustment based on available resources
+- Implement automated hyperparameter tuning with popular optimization libraries
+- Add advanced memory optimization strategies and automatic memory profiling
+- Create adaptive batch sizing based on available GPU memory and computational resources
+- Basic KL divergence handling: Simple KL penalty implementation without adaptive mechanisms algs.py:37-53
+- No multi-objective optimization: Missing support for multiple competing objectives
+- Alternative Advantage Estimation Methods Beyond GAE and REINFORCE
+RL2 currently implements two advantage estimation methods: Generalized Advantage Estimation (GAE) and REINFORCE algs.py:54-105 . The best alternative methods to implement would be:
+
+V-trace - Particularly beneficial for off-policy learning and distributed training, offering better sample efficiency than GAE in multi-worker environments
+Retrace(λ) - Provides safe off-policy corrections with lower variance than importance sampling methods
+TD(λ) advantage estimation - Offers a middle ground between temporal difference and Monte Carlo methods with adjustable bias-variance trade-off
+Clipped importance sampling advantages - Useful for off-policy data and can improve sample efficiency in experience replay scenarios
+Multi-step returns with different bootstrapping strategies - Can provide better long-term credit assignment than standard GAE
+Model Formats Beyond HuggingFace Transformers
+RL2 currently uses HuggingFace's AutoLigerKernelForCausalLM for actor models and AutoModelForTokenClassification for critic models actor.py:202 critic.py:1-50 . Beneficial additional model format support would include:
+
+JAX/Flax models - Superior performance on TPUs and better memory efficiency for large-scale training
+Native PyTorch modules - Support for custom architectures and research models not available in HuggingFace
+ONNX format - Optimized inference and cross-framework compatibility
+Quantized model formats - Int8/Int4 quantization for memory-efficient deployment
+xFormers/Flash Attention implementations - Memory-efficient attention mechanisms for longer sequences
+Mixture of Experts (MoE) architectures - Specialized model formats for scaling while maintaining efficiency
+State Space Models (SSMs) - Linear attention alternatives like Mamba for long sequence modeling

@@ -1,0 +1,1 @@
+{'enabled': True, 'tracking_uri': None, 'experiment_name': 'RL2_PPO_Experiment', 'run_name': None, 'enable_mlflow': True, 'enable_wandb': True, 'log_models': True, 'log_artifacts': True, 'log_system_metrics': True, 'auto_log': True, 'model_versioning': {'enabled': False, 'model_registry_uri': None, 'enable_auto_versioning': True}}

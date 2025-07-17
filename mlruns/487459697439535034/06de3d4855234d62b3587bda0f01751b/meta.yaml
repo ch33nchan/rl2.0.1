@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/cheencheen/Desktop/RL2-main/mlruns/487459697439535034/06de3d4855234d62b3587bda0f01751b/artifacts
+end_time: 1752783634085
+entry_point_name: ''
+experiment_id: '487459697439535034'
+lifecycle_stage: active
+run_id: 06de3d4855234d62b3587bda0f01751b
+run_name: ppo_1752783634
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1752783634054
+status: 3
+tags: []
+user_id: cheencheen

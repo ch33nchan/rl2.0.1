@@ -1,0 +1,29 @@
+{
+  "memory_history": [
+    {
+      "timestamp": 1752779370.9439528,
+      "gpu_allocated": 0.0,
+      "gpu_reserved": 0.0,
+      "cpu_memory": 0.280853271484375,
+      "cpu_percent": 1.7553329467773438
+    },
+    {
+      "timestamp": 1752779371.449065,
+      "gpu_allocated": 0.0,
+      "gpu_reserved": 0.0,
+      "cpu_memory": 0.3220672607421875,
+      "cpu_percent": 2.012920379638672
+    },
+    {
+      "timestamp": 1752779371.95202,
+      "gpu_allocated": 0.0,
+      "gpu_reserved": 0.0,
+      "cpu_memory": 0.345977783203125,
+      "cpu_percent": 2.1623611450195312
+    }
+  ],
+  "memory_events": [
+    {
+      "event_name": "memory_demo_start",
+      "timestamp": 1752779370.944082,
+      "memory_stats": 

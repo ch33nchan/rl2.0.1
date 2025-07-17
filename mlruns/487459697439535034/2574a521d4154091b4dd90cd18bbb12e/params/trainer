@@ -1,0 +1,1 @@
+{'project': None, 'experiment_name': None, 'n_epochs': 1, 'test_freq': None, 'disable_wandb': False}

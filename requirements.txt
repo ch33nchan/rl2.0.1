@@ -1,0 +1,19 @@
+hydra-core
+ninja
+ring-flash-attn==0.1.4
+torch==2.6.0
+tqdm
+transformers
+peft
+liger_kernel
+sglang[all]==0.4.6.post5
+wandb
+flash-attn==2.7.4.post1
+# New dependencies for enhanced features
+numpy>=1.21.0
+psutil>=5.8.0
+mlflow>=2.0.0
+optuna>=3.0.0
+scikit-optimize>=0.9.0
+hyperopt>=0.2.7
+bayesian-optimization>=1.4.0

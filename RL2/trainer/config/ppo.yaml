@@ -1,0 +1,224 @@
+data:
+  train_data_path: null
+  test_data_path: null
+  prompts_per_rollout: null
+  responses_per_prompt: null
+  
+actor:
+  model_name: null
+  tokenizer_name: ${actor.model_name}
+  use_liger_kernel: false
+  gradient_checkpointing: true
+  ddp_size: 1
+  tp_size: 1
+  sp_size: 1
+  optimizer_dir: null
+  max_length_per_device: null
+  max_inference_length_per_device: ${actor.max_length_per_device}
+  temperature: ${rollout.train_sampling_params.temperature}
+  update_per_rollout: 1
+  clip: 0.2
+  lr: 1e-6
+  weight_decay: 1e-2
+  max_grad_norm: 1.0
+  freeze_steps: 0
+  offload_model: true
+  offload_optimizer: true
+  adv_estimator: ${adv.estimator}
+  save_dir: ckpts/${trainer.experiment_name}/actor
+  save_freq: null
+  save_optimizer: true
+
+  kl:
+    coef: 0.0
+    type: null # `reward` or `loss`
+    reward_estimator: k1
+    loss_estimator: k2
+    # `k1`, `k2` or `k3`. See http://joschu.net/blog/kl-approx.html.
+    
+    # Adaptive KL penalty configuration
+    adaptive_kl:
+      enabled: false
+      controller_type: "exponential"  # "exponential", "linear", "pid", "schedule", "fixed"
+      target_kl: 0.01
+      initial_coef: 0.2
+      exp_factor: 1.03
+      exp_decay: 0.99
+      linear_factor: 0.5
+      kp: 0.1
+      ki: 0.01
+      kd: 0.001
+      schedule_type: "cosine"
+      schedule_steps: 1000
+      min_coef: 0.001
+      max_coef: 10.0
+    
+    # Constraint optimization
+    constraint_optimization:
+      enabled: false
+      kl_constraint: 0.01
+      entropy_constraint: 0.01
+      use_lagrangian: true
+      lagrangian_lr: 0.01
+      constraint_violation_penalty: 10.0
+
+  entropy:
+    coef: 0.0
+
+rollout:
+  model_name: ${actor.model_name}
+  tokenizer_name: ${rollout.model_name}
+  tp_size: 1
+  gpu_memory_utilization: 0.5
+  responses_per_prompt: ${data.responses_per_prompt}
+  apply_chat_template: true
+  train_sampling_params:
+    temperature: 1.0
+    max_new_tokens: null
+  test_sampling_params:
+    temperature: 0.0
+    max_new_tokens: ${rollout.train_sampling_params.max_new_tokens}
+  max_turns: 1
+  env_path: null
+  dynamic_filtering: true
+  adv_estimator: ${adv.estimator}
+
+ref_actor:
+  model_name: ${actor.model_name}
+  tokenizer_name: ${ref_actor.model_name}
+  use_liger_kernel: ${actor.use_liger_kernel}
+  ddp_size: ${actor.ddp_size}
+  tp_size: ${actor.tp_size}
+  sp_size: ${actor.sp_size}
+  max_inference_length_per_device: ${actor.max_length_per_device}
+  temperature: ${rollout.train_sampling_params.temperature}
+  offload_model: ${actor.offload_model}
+
+critic:
+  model_name: ${actor.model_name}
+  tokenizer_name: ${critic.model_name}
+  gradient_checkpointing: ${actor.gradient_checkpointing}
+  ddp_size: ${actor.ddp_size}
+  tp_size: ${actor.tp_size}
+  sp_size: ${actor.sp_size}
+  optimizer_dir: null
+  max_length_per_device: ${actor.max_length_per_device}
+  max_inference_length_per_device: ${critic.max_length_per_device}
+  update_per_rollout: 12
+  clip: 0.5
+  lr: 5e-6
+  weight_decay: ${actor.weight_decay}
+  max_grad_norm: ${actor.max_grad_norm}
+  offload_model: ${actor.offload_model}
+  offload_optimizer: ${actor.offload_optimizer}
+  save_dir: ckpts/${trainer.experiment_name}/critic
+  save_freq: ${actor.save_freq}
+  save_optimizer: ${actor.save_optimizer}
+
+  lora:
+    rank: 0
+    alpha: 16
+    target_modules: all-linear
+    dropout: 0
+
+adv:
+  estimator: reinforce # reinforce, gae, vtrace, retrace, td_lambda, clipped_is, multistep, zero
+  gamma: 1.0
+  lamda: 1.0
+  norm_var: false
+  
+  # V-trace parameters
+  vtrace:
+    rho_bar: 1.0
+    c_bar: 1.0
+  
+  # Retrace parameters  
+  retrace:
+    lamda: 0.95
+  
+  # Clipped IS parameters
+  clipped_is:
+    clip_ratio: 0.2
+  
+  # Multi-step parameters
+  multistep:
+    n_steps: 5
+    bootstrap_method: "gae"  # "gae", "td", "mc"
+
+# Multi-objective optimization
+multi_objective:
+  enabled: false
+  objectives: ["reward", "kl_penalty", "entropy"]
+  objective_weights:
+    reward: 1.0
+    kl_penalty: -0.1
+    entropy: 0.01
+  pareto_method: "weighted_sum"  # "weighted_sum", "tchebycheff", "pareto_dominance", "hypervolume"
+  diversity_weight: 0.1
+  archive_size: 100
+
+# Hyperparameter optimization
+hyperopt:
+  enabled: false
+  optimizer_type: "random"  # "random", "grid", "bayesian"
+  n_trials: 100
+  save_dir: "hyperopt_results"
+  
+  # Bayesian optimization parameters
+  bayesian:
+    exploration_weight: 0.1
+  
+  # Grid search parameters
+  grid:
+    grid_size: 10
+
+# Memory optimization
+memory_optimization:
+  enabled: true
+  enable_gradient_checkpointing: true
+  enable_mixed_precision: true
+  enable_cpu_offload: true
+  enable_activation_checkpointing: true
+  memory_threshold: 0.8
+  gc_threshold: 0.9
+  
+  # Memory profiling
+  profiling:
+    enabled: false
+    profile_interval: 1.0
+    save_path: "memory_profile.json"
+  
+  # Adaptive batch sizing
+  adaptive_batch_sizing:
+    enabled: false
+    initial_batch_size: 8
+    min_batch_size: 1
+    max_batch_size: 64
+    adaptation_factor: 0.1
+
+# Experiment tracking
+experiment_tracking:
+  enabled: true
+  tracking_uri: null
+  experiment_name: "RL2_PPO_Experiment"
+  run_name: null
+  enable_mlflow: true
+  enable_wandb: true
+  log_models: true
+  log_artifacts: true
+  log_system_metrics: true
+  auto_log: true
+  
+  # Model versioning
+  model_versioning:
+    enabled: false
+    model_registry_uri: null
+    enable_auto_versioning: true
+  
+trainer:
+  project: null
+  experiment_name: null
+  n_epochs: 1
+  test_freq: null
+  disable_wandb: false
+  

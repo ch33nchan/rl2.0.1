@@ -1,0 +1,1 @@
+{'enabled': False, 'objectives': ['reward', 'kl_penalty', 'entropy'], 'objective_weights': {'reward': 1.0, 'kl_penalty': -0.1, 'entropy': 0.01}, 'pareto_method': 'weighted_sum', 'diversity_weight': 0.1, 'archive_size': 100}
